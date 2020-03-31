@@ -1,0 +1,104 @@
+%% LaTeX2e class for student theses
+%% sections/content.tex
+%% 
+%% Karlsruhe Institute of Technology
+%% Institute for Program Structures and Data Organization
+%% Chair for Software Design and Quality (SDQ)
+%%
+%% Dr.-Ing. Erik Burger
+%% burger@kit.edu
+%%
+%% Version 1.3.3, 2018-04-17
+
+\chapter{Grundlagen}
+\label{ch:FirstContent}
+\section{Evolutionäre Algorithmen}
+\label{sec:FirstContent:FirstSection}
+Es gibt viele mögliche Verfahren, um maschinelles Lernen durchzuführen. Das in dieser Arbeit verwendete Verfahren gehört zu der Klasse der evolutionären Algortihmen \cite{dirk2018}. Dabei wird nicht nur ein Modell trainiert, sondern eine Menge von Modellen gleichzeitig. Evolutionär ist ein Algorithmus auf Grund der Ähnlichkeit zur Evolution in der Natur. In der Natur versucht eine Spezies möglichst gut mit der Umwelt klarzukommen, um bspw. Nahrung oder einen Partner für die Fortpflanzung zu finden. Einzelne Individuen der Spezies fallen Räubern zum Opfer oder sind in einem bestimmten Sinne nicht gut genug für das andere Geschlecht, sodass keine nachfolgende Generation entstehen kann. Dieser Überlebens- bzw. Konkurrenzkampf findet sich auch in evolutionären Algorithmen wieder. Der konkrete Zyklus evolutionärer Algorithmen wird im Folgenden beleuchtet.
+\\
+\\
+Evolutionären Algorithmen haben einige Zustände oder Operatoren im Zyklus der Evolution gemeinsam. Zu Beginn wird eine Menge von Individuen initialisiert, die als Population bezeichnet wird. Jedes Individuum wird anschließend auf ein zu lernendes Problem angewendet. Dabei wird mit jeder Aktion eines Individuums ein Wert zurückgegeben, der den Erfolg oder Misserfolg einer Aktion darstellt. Dieser reelle Wert wird Belohnung oder Fitness genannt und wird auf Basis einer zu definierenden Fitness-Funktion berechnet. Anhand der jeweils trainierten Fitness wird eine Untermenge der besten Individuen aus der Population gewählt, was als Selektion bezeichnet wird. Danach folgt eine sogenannte Rekombination, bei der die Gene der aktuellen Gewinner kombiniert werden, um somit die Grundlage für die nächste Generation zu bilden. Anschließend werden Eigenschaften eines Anteils der neuen Population verändert. Dieser Vorgang ist die Mutation und sorgt dafür, dass eine Art von Vielgestaltigkeit in der Population existiert. Mit diesem Ansatz wird versucht, lokalen Optima entgegenzuwirken. Nach der Mutation folgt erneut die Selektion und Rekombination. Diese drei Operationen werden durchgeführt bis ein bestimmter Fitness-Schwellwert erreicht wird oder eine Trainingszeit abgelaufen ist.
+\\\\
+Es existieren verschiedene konkrete Vertreter der evolutionären Algorithmen, von denen der für diese Arbeit Relevante im folgenden Abschnitt vorgestellt wird.
+\section{Neuroevolution of Augmenting Topologies (NEAT)}
+\label{sec:FirstContent:SecondSection}
+Der Algorithmus Neuroevolution of Augmenting Topologies (NEAT) ist ein Beispiel für einen evolutionären Algorithmus und wurde im Paper von \cite{stanley2002} vorgestellt. NEAT im Detail zu beschreiben, würde den Rahmen dieser Dokumentation sprengen, weshalb im Folgenden lediglich auf Grundaspekte des Algorithmus eingegangen wird. Bei NEAT geht es um künstliche neuronale Netze, die möglichst klein beginnen, aber mit der Zeit an Struktur und damit Komplexität hinzugewinnen. Die Initialisierung des evolutionären Vorgangs geschieht dementsprechend mit der Generierung der Population aus Netzen. Die Gene eines jeden Netzes setzen sich aus je einer Liste an Neuronen und Verbindungen zusammen. Neuronen bestehen in dieser Liste jeweils aus einer Nummer und der Bezeichnung als Eingabe-, Ausgabe- oder Verstecktes-Neuron (engl. hidden). Die Beschreibung einer Verbindung enthält dagegen die Informationen, zwischen welchen Neuronen sie verbindet, welches Gewicht sie hat, ob sie aktiv oder deaktiviert ist und eine sogenannte Innovationszahl. Letzteres wird dazu verwendet, um eine Rekombination homogener Netze zu ermöglichen.
+\\\\
+Die Netze erhalten für ihre Ausgabe einen Fitness-Wert einer Fitness-Funktion, mit dem nach einer Trainingsepisode eine Selektion der besten Netze stattfindet. In NEAT konkurrieren jedoch nicht jeweils alle Netze der Population mit allen Anderen, sondern innerhalb von Gruppen, die durch eine Artbildung entstehen. NEAT gruppiert Netze mit ähnlichen Topologien und Gewichten, um dadurch eine Vielgestaltigkeit zu gewährleisten und lokalen Optima möglichst lange zu entfliehen. Verschiedene Topologien entstehen bei NEAT durch den Mutationsvorgang, in welchem ein Netz neue Neuronen oder Verbindungen hinzubekommt oder stattdessen entfernt werden.
+\\\\
+Um mithilfe des NEAT-Algorithmus Modelle für Atari- oder Robotik-Umgebungen rechnergestützt zu trainieren, werden die entsprechenden Umgebungen selbst benötigt. Eine mögliche Quelle dafür wird im folgenden Abschnitt erläutert.
+\section{Open AI Gym}
+\label{sec:Gym}
+Um Modellen des maschinellen Lernens eine einheitliche Lernumgebung zu bieten, wurde die Python-Bibliothek OpenAI Gym im Jahr 2016 von der Forschungseinrichtung Open AI veröffentlicht \cite{brockman2016}. Open AI verfolgt das Ziel, die Forschung bezüglich künstlicher Intelligenz global offener und standardisierter zu etablieren. Darum bietet OpenAI Gym die Möglichkeit an, über festgelegte Schnittstellen in gleicher Weise auf unterschiedliche Lernumgebungen zuzugreifen, die entweder bereits in OpenAI Gym implementiert sind oder von Bibliotheken Dritter stammen.
+\\
+\\
+Alle Lernumgebungen in OpenAI Gym bieten die Möglichkeit an, eine Aktion über die Methode "step(action)" durchzuführen. Dabei wird ein Parameter "action" mitgegeben, der einen oder mehrere Zahlenwerte enthält, die eine Aktion innerhalb der Umgebung beschreibt. In Atari-Spielen ist "action" eine Ganzzahl, die für Aktionen wie "Nach links fliegen" oder "Schießen" steht. Jede Aktion liefert vier Rückgabewerte, die im Folgenden aufgelistet sind.
+\begin{itemize}
+	\item Beobachtung (engl. observation) vom Typ „object“: Ein an die Umgebung spezialisiertes Objekt, das dementsprechende Attribute, wie Pixeldaten einer Kamera oder den Zustand eines Brettspieles enthält. Bereits mit dem Befehl „env.reset()“ in Zeile 4 des Listings wird eine erste Beobachtung zurückgegeben, die in diesem Beispiel keine Verwendung findet.
+	\item Belohnung (engl. Reward) vom Typ „float“: Dieser Wert gibt die Größe der Belohnung an, die mittels der letzten Aktion erhalten wurde. Die Skalierung des Wertes variiert dabei zwischen verschiedenen Umgebungen. Die Erhöhung des insgesamt erzielten Belohungswertes ist meistens das Ziel eines in diesem Kontext angewandten Algorithmus.
+	\item Fertig (engl. Done) vom Typ „boolean“: Wenn dieser Wert „wahr“ ist, signalisiert die Umgebung, dass ein Zurücksetzen der Umgebung notwendig ist. Gründe dafür sind beispielsweise das Verlieren aller Lebenspunkte in einem Spiel.
+	\item Information (engl. Info) vom Typ „dictionary“: Hierbei handelt es sich um für das Debugging relevante Informationen, die nicht für das Lernen eines Algorithmus verwendet werden dürfen.
+\end{itemize}
+Für das Trainieren einer künstlichen Intelligenz für Robotik-Probleme, stehen verschiedene konkrete Trainingumgebungen zur Auswahl. Zusätzlich sind diese Umgebungen aus unterschiedlichen Programmbibliotheken beziehbar. Zum Einen sind das die Robotik-Umgebungen aus Roboschool, die in der Pybullet-Bibliothek kostenlos verfügbar sind. Zum Anderen liefert die Mujoco-Bibliothek kostenlos für Testzwecke oder gegen Bezahlung ebenfalls Robotik-Umgebungen. In beiden Bibliotheken sind nahezu die gleichen Robotik-Aufgaben zu finden, wobei sie unterschiedlich implementiert sind. Das führt bei Pybullet dazu, dass ein NEAT-Modell hier schwieriger zu trainieren ist, als in Mujoco. Aus diesem Grund wird im Rahmen dieser Arbeit eine kostenlose Mujoco-Lizenz für Studenten erworben, die für ein Jahr und nur auf einem Endgerät gültig ist.
+\\
+\\
+Die für diese Arbeit andere relevante Kategorie ist „Atari“. In jeder Umgebung wird ein Atari-Spiel emuliert, das ein Agent so gut wie möglich abschließen soll. Jedes Spiel ist in jeweils zwei Umgebungen verfügbar. Eine der beiden Umgebungen liefert ein Bild des Spiel-Bildschirms als Eingabe für das Lernen, während die andere Umgebung den Zustand des RAM der emulierten Atari-Maschine als Input anbietet. Somit ergeben sich momentan 59 verfügbare Atari-Spiele. Daher existieren viele verschiedene mögliche Aufgaben-Typen. Zum Beispiel werden in der Umgebung „Assault-v0“ Punkte durch das Zerstören von feindlichen Raumschiffen mittels eines Lasergeschosses erzielt, während in „Bowling-v0“ eine Bowling-Kugel, von links nach rechts geworfen, möglichst viele Pins umwerfen soll.
+\section{NEAT Frameworks}
+\label{sec:frameworks}
+Um eine künstliche Intelligenz für das Spielen von Atari-Spielen oder dem Lösen von Robotik-Problemen zu trainieren, ist die Implementierung des Trainingsquellcodes erforderlich. Für den vorgestellten evolutionären Algorithmus NEAT gibt es bereits fertig implementierte Programmbibliotheken in verschieden Programmiersprachen \cite{stanley2020}. Da in dieser Arbeit die Programmiersprache Python verwendet wird, werden im Folgenden nur die für Python vorhandenen Vertreter aufgelistet. 
+\begin{center}
+	\begin{table}
+		\begin{tabular}{ |c|c|c|c| } 
+			\hline
+			Framework & Lizenz & Veröffentlichung & Eigenschaften \\ 
+			\hline
+			NEAT-Python & BSD-3-Clause & 2008 & Gute Dokumentation \\ 
+			MultiNEAT & LGPL & 2012 & Schnell durch C++ \\ 
+			PyTorch NEAT & Apache 2.0 & 2018 & GPU-Unterstützung \\
+			\hline
+		\end{tabular}
+	\caption{Die Frameworks NEAT-Python, MultiNEAT und PyTorch NEAT implementieren den NEAT-Algorithmus in Python}
+	\label{tab:meineTabelle}
+	\end{table}
+\end{center}
+Für die finalen Trainingsdurchläufe dieser Arbeit wird die Bibliothek NEAT-Python verwendet, da sie am bewährtesten und am besten dokumentiert ist. Daher werden im Folgenden Beispiele für Konfigurationsparameter des NEAT-Python-Frameworks vorgestellt.
+\\
+\\
+In der Konfigurationsdatei für NEAT-Python befinden sich verschiedene Sektionen, die jeweils bestimmte Konfigurationsparameter beinhalten. Die Angabe aller Sektionen und deren Parameter ist bis auf ein paar Ausnahmen nicht notwendig, um die Konfigurationsdatei zu verwenden. Alle verfügbaren Parameter hier vorzustellen würde den Rahmen dieser Arbeit sprengen, daher wird stattdessen eine Auswahl der Möglichkeiten beleuchtet.
+\begin{itemize}
+	\item Die NEAT-Sektion enthält Parameter, die das Experiment als Ganzes betreffen. Zum Beispiel den Schwellwert für die Populations-Leistung, ab welchem das Training für beendet erklärt wird, oder die Anzahl an Genomen in jeder Population, was die erforderliche Rechenleistung erhöht.
+	\item Die Sektion für die standardweise Stagnation enthält Parameter für die Angabe, ab wann eine Spezies als stagniert gilt oder wieviele der besten Spezies trotz Stagnation behalten werden sollen.
+	\item In der Sektion für die standardweise Reproduktion sind Werte wie die Anzahl der als „Elite“ zu bezeichneten Individuen oder die kleineste Anzahl an Genomen pro Spezies nach jeder Reproduktion einstellbar.
+	\item Die dritte und damit letzte in der Dokumentation von Neat-Python erwähnte Sektion ist die für standardmäßige Genome. Hierbei sind zudem die meisten Parameter einstellbar. Dazu gehört zum Beispiel die Wahrscheinlichkeit für Mutationen, eine neue Verbindung zwischen existierenden Knoten zu erstellen.
+\end{itemize}
+Im nachfolgenden Kapitel werden die Implementierungen vorgestellt.
+\chapter{Implementierungsansatz}
+In diesem Kapitel wird beschrieben, wie mithilfe des NEAT-Python-Frameworks und der Bibltiohek Open AI Gym das Training eines Modells für Atari-Spiele und Robotik-Probleme implementiert wird. Das Training eines Modells erfolgt für beide Zieldomänen in ähnlicher folgender Weise.
+\\
+\\
+Zunächst wird die Konfigurationsdatei für NEAT-Python geladen und daraus die Population generiert. Der Population werden anschließend optional sogenannte Reporter hinzugefügt. Das sind Objekte, die den Lernverlauf der Population für verschiedene Zwecke nutzen. Zum Beispiel fasst ein "StatisticsReporter"-Objekt Statistiken bezüglich des Lernfortschirtts, wie zum Beispiel die in jeder Generation maximal erreichte Leistung, in einem Liniendiagramm zusammen. Anschließend wird für eine parallele Ausführung ein "ParallelEvaluator"-Objekt erzeugt, dem die Anzahl an Threads und eine Referenz zur Lernmethode mitgegeben wird. Der Evaluator zusammen mit einer optionalen Angabe für die Anzahl an maximal auszuführenden Generationen, werden dem Start des Trainings durch das Populations-Objekt als Eingangsvariablen mitgegeben. Das Ergebnis des Trainings ist ein Gewinner-Netz, das im Anschluss daran abgespeichert wird. Für die Evaluation der Trainingsergebnisse werden zudem Statistiken ebenfalls generiert und abgespeichert.
+\\
+\\
+Die konkrete Implementierung einer Trainingsmethode hängt von der Zieldomäne ab, weshalb im Folgenden die Implementierungsansätze der Atari- und Robotik-Domäne einzeln vorgestellt werden.
+\section{Implementierung eines Trainings für Atari-Modelle}
+Für jeden Thread wird zunächst eine konkrete Umgebung aus OpenAI Gym instantiiert und das zu trainierende Netz mittels des Genoms dieses Threads und der Konfiguration generiert. Anschließend befindet sich der Thread in einer Endlosschleife, die endet, sobald die Lernumgebung den Wert "done == True" zurückgibt oder durch eine selbst gewählte Zeitüberschreitung der Wert "done" manuell auf "True" gesetzt wird. In jedem Schleifendurchlauf geschehen die folgenden Dinge.
+\\
+\\
+Im ersten Schritt wird die aktuelle Beobachtung, also das Bild des Atari-Bildschrims, vorverarbeitet. Im ersten Durchlauf wird das dementsprechend erste Bild mittels einer Beispielaktion erzeugt. Die Vorverarbeitung des Bildes ist wichtig, weil die Anzahl der Eingangsparameter bei einem unverarbeiteten Bild mit drei Farbkanälen bereits bei 100.800 (210 x 160 x 3) liegt, was relativ hoch ist. Stattdessen wird aus dem Farbbild ein Graustufenbild mithilfe der OpenCV-Bibliothek erzeugt, wodurch noch 33.600 (210 x 160 x 1) Parameter bleiben. Zusätzlich wird das Bild auf 42 x 32 Pixel kleiner skaliert, um die Parameteranzahl weiter zu reduzieren. Dadurch bleiben nach der Vorverarbeitung 1.344 Eingangsparameter.
+\\
+\\
+Nach der Vorverarbeitung wird die Bild-Matrix in einen einzeiligen Vektor mithilfe der Numpy-Bibliothek umgewandelt und dem Netz als Eingabe übergeben. Die resultierende Ausgabe ist ein Vektor, der für jedes der im Atari-Spiel möglichen Aktionen einen Wert enthält. Die Aktion mit dem höchsten Wert wird dem Atari-Spiel als nächste durchzuführende Aktion weitergegegeben.
+\\
+\\
+Die aus der Aktion resultierende Fitness wird der Fitness des Threads hinzugefügt und falls die Umgebung "done==True" zurückgibt oder eine bestimmte Zeitgrenze erreicht wurde, wird in der Konsole unter Anderem die vom Thread erreichte Fitness ausgegeben. Die neue Beobachtung überschreibt die Alte und durchläuft im nächsten Schleifendurchlauf die bereits erwähnte Bildvorverarbeitung.
+\section{Implementierung eines Trainings für Roboter-Modelle}
+Für das Trainieren eines Robotik-Modells ist im Gegensatz zu Atari-Modellen keine Vorverarbeitung der Beobachtungsdaten notwendig, da die Dimension des Beobachtungsvektors vergleichsweise klein ausfällt. Der Trainingsansatz ist der Folgende.
+\\
+\\
+Wie auch im Training für Atri-Modelle wird für jeden Thread eine eigene Umgebung und ein eigenes Netz erzeugt. Im Anschluss daran folgt eine Endlosschleife, die im Gegensatz zum Atari-Training nicht nach einer bestimmten Zeitspanne enden soll. Der Grund dafür ist, dass ein Netz für Atari-Spiele eine Aktion lernen konnte, bei der ein Spieler im Spiel nichts macht. Um dies in gewisser Weise zu bestrafen, wurde eine Zeitschwelle für Atari-Modelle eingeführt. In den Robotik-Beispielen gibt es eine solche lernbare Aktion explizit nicht.
+\\
+\\
+In der Endlosschleife wird zunächst der aktuelle Beobachtungsvektor ohne weitere Vorverarbeitung dem Netz als Eingabe übergeben. Die resultierende Ausgabe erhält daraufhin direkt die Umgebung aus OpenAI Gym, um eine Aktion auszuführen. Für die "Swimmer"-Umgebung war es zudem notwendig, vor dem Aktionsschritt eine Zeit von ca. einem Zehntel einer Millisekunde zu warten, da die Mujoco-Umgebung aufgrund der parallelen Verarbeitung ansonsten einen Fehler wirft.
+\\
+\\
+Zum Schluss wird die aktuelle Fitness der Fitness des Threads hinzugefügt und im Falle eines Schleifenendes in der Konsole ausgegeben. Es hat sich zudem als nützlich erwiesen, bei einer Gesamt-Fitness von unter -300 die Endlosschleife sofort abzubrechen, da ein längeres Training für Threads in diesem Bereich keine guten Erfolge erzielt.

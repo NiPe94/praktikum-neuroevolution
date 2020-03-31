@@ -1,0 +1,168 @@
+%% LaTeX2e class for student theses
+%% thesis.tex
+%% 
+%% Karlsruhe Institute of Technology
+%% Institute for Program Structures and Data Organization
+%% Chair for Software Design and Quality (SDQ)
+%%
+%% Dr.-Ing. Erik Burger
+%% burger@kit.edu
+%%
+%% See https://sdqweb.ipd.kit.edu/wiki/Dokumentvorlagen
+%%
+%% {$HeadURL$}
+%% {$LastChangedDate$}
+%% {$LastChangedRevision$}
+%% {$LastChangedBy$}
+
+%% Available page modes: oneside, twoside
+%% Available languages: english, ngerman
+%% Available modes: draft, final (see README)
+\documentclass[oneside, ngerman, draft]{sdqthesis}
+
+%% ---------------------------------
+%% | Information about the thesis  |
+%% ---------------------------------
+
+%% Name of the author
+\author{Nico Peter}
+
+%% Title (and possibly subtitle) of the thesis
+\title{Implementierung von neuroevolutionären KI-Verfahren für das Erlernen von Atari-Spielen und Robotik-Problemen}
+
+%% Type of the thesis 
+\thesistype{Dokumentation}
+
+%% Change the institute here, ``IPD'' is default
+% \myinstitute{Institute for \dots}
+
+%% You can put a logo in the ``logos'' directory and include it here
+%% instead of the SDQ logo
+% \grouplogo{myfile}
+%% Alternatively, you can disable the group logo
+% \nogrouplogo
+
+%% The reviewers are the professors that grade your thesis
+\reviewerone{Ralf Reussner}
+\reviewertwo{Daniel Zimmermann}
+
+%% Please enter the start end end time of your thesis
+\editingtime{24. Oktober 2019}{31. März 2020}
+
+\settitle
+
+%% --------------------------------
+%% | Settings for word separation |
+%% --------------------------------
+
+%% Describe separation hints here.
+%% For more details, see 
+%% http://en.wikibooks.org/wiki/LaTeX/Text_Formatting#Hyphenation
+\hyphenation{
+% me-ta-mo-del
+}
+
+%% --------------------------------
+%% | Bibliography                 |
+%% --------------------------------
+
+%% Use biber instead of BibTeX, see README
+\usepackage[citestyle=numeric,style=numeric,backend=biber]{biblatex}
+\usepackage[nottoc]{tocbibind}
+\addbibresource{thesis.bib}
+
+%% ====================================
+%% ====================================
+%% ||                                ||
+%% || Beginning of the main document ||
+%% ||                                ||
+%% ====================================
+%% ====================================
+\begin{document}
+
+%% Set PDF metadata
+\setpdf
+
+%% Set the title
+\maketitle
+
+%% The Preamble begins here
+\frontmatter
+
+\input{sections/declaration.tex}
+
+\setcounter{page}{1}
+\pagenumbering{roman}
+
+%% ----------------
+%% |   Abstract   |
+%% ----------------
+ 
+%% For theses written in English, an abstract both in English
+%% and German is mandatory.
+%%
+%% For theses written in German, a German abstract is sufficient.
+%%
+%% The text is included from the following files:
+%% - sections/abstract
+
+\includeabstract
+
+%% ------------------------
+%% |   Table of Contents  |
+%% ------------------------
+\tableofcontents
+
+\listoftables
+
+%% -----------------
+%% |   Main part   |
+%% -----------------
+
+\mainmatter
+
+\input{sections/introduction.tex}
+\input{sections/content.tex}
+\input{sections/evaluation.tex}
+\input{sections/conclusion.tex}
+
+%% --------------------
+%% |   Bibliography   |
+%% --------------------
+
+%% Add entry to the table of contents for the bibliography
+\printbibliography[
+heading=bibintoc,
+title={Literatur}
+]
+
+\begin{thebibliography}{9}
+	\bibitem[gupta2019]{gupta2019} 
+	Vedant Gupta. 
+	\textit{How to use AI to play Sonic the Hedgehog. It’s NEAT!}. 
+	https://www.freecodecamp.org/news/how-to-use-ai-to-play-sonic-the-hedgehog-its-neat-9d862a2aef98/, 2019.
+	
+	\bibitem[stanley2002]{stanley2002} 
+	Stanley, Kenneth O., Risto Miikkulainen. 
+	\textit{Evolving neural networks through augmenting topologies}.
+	Evolutionary computation, 10.2, 99-127, 2002.
+	
+	\bibitem[dirk2018]{dirk2018} 
+	Jan-Dirk. 
+	\textit{Was sind evolutionäre Algorithmen?}.
+	https://www.it-talents.de/blog/it-talents/was-sind-evolutionaere-algorithmen, 2018.
+	
+	\bibitem[brockman2016]{brockman2016} 
+	Brockman, Greg u.a.
+	\textit{Openai gym}.
+	arXiv:1606.01540, 2016.
+	
+	\bibitem[stanley2020]{stanley2020} 
+	Stanley, Kenneth O. 
+	\textit{Find the Right Version of NEAT for Your Needs}.
+	http://eplex.cs.ucf.edu/neat\_software/, 2020.
+	
+	
+\end{thebibliography}
+
+\end{document}

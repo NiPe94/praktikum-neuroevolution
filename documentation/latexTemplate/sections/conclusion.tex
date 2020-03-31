@@ -1,0 +1,18 @@
+%% LaTeX2e class for student theses
+%% sections/conclusion.tex
+%% 
+%% Karlsruhe Institute of Technology
+%% Institute for Program Structures and Data Organization
+%% Chair for Software Design and Quality (SDQ)
+%%
+%% Dr.-Ing. Erik Burger
+%% burger@kit.edu
+%%
+%% Version 1.3.3, 2018-04-17
+
+\chapter{Zusammenfassung und Ausblick}
+\label{ch:Conclusion}
+Das Ziel dieser Arbeit war das Training von Modellen des maschinellen Lernens für das Lösen von Atarispielen und Robotikproblemen. Der dafür verwendete Algorithmus ist Neuroevolution of Augmenting Topologies (NEAT), der in einem evolutionären Verfahren künstliche neuronale Netze in ihrer Struktur und ihren Gewichten optimiert. Für die Implementierung des Algorithmus standen veschiedene bereits veröffentliche Frameworks zur Auswahl, von denen die NEAT-Python-Bibltiohek aufgrund ihrer Dokumentation und Etabliertheit in der Community gewählt wurde. Um dem Modell eine einheitliche Trainingsumgebung zur Verfügung zu stellen, wurden die Umgebungen aus dem Framework OpenAI Gym genutzt. Anschließend wurde der Code für das Training der Netze implementiert, wobei für das Lernen von Atari-Spielen eine Bildvorverarbeitung nötig war, um die Anzahl der zu lernenden Parameter zu reduzieren. Für das Lernen von Atari-Spielen wurde die Erfahrung gemacht, dass es sinnvoll ist, für ein bestimmtes Spiel den Aktionsraum auf wesentliche oder zielführende Aktionen zu beschränken und sich der Schwierigkeit eines Spiels vor dem Training bewusst zu werden. Die trainierten Robotik-Modelle waren nicht in der Lage, innerhalb ihrer Trainingszeit gute Ergebnisse zu erzielen, was entweder an der Zeitbeschränkung oder der Netzkonfiguration liegt.
+\\
+\\
+Für weitere Arbeiten in Bezug auf das Trainieren von Robotik-Modellen wären längere Trainingszeiten bzw. größere Populationen denkbar, um eine höhere Chance auf bessere Optima zu gewährleisten. Dazu wäre eine tiefergehende Optimierung der Hyperparameter von NEAT sinnvoll, um für bestimmte Umgebungen bessere Ergebnisse zu erzielen. Ebenfalls wäre ein Vergleich von NEAT mit anderen evolutionären Lernverfahren interessant, um für das Lösen von Robotik-Problemen bessere Alternativen zu identifizieren.

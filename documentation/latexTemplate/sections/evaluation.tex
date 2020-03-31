@@ -1,0 +1,40 @@
+%% LaTeX2e class for student theses
+%% sections/evaluation.tex
+%% 
+%% Karlsruhe Institute of Technology
+%% Institute for Program Structures and Data Organization
+%% Chair for Software Design and Quality (SDQ)
+%%
+%% Dr.-Ing. Erik Burger
+%% burger@kit.edu
+%%
+%% Version 1.3.3, 2018-04-17
+
+\chapter{Ergebnisse}
+\label{ch:Evaluation}
+In diesem Kapitel werden die Erfahrungen und Trainingsergebnisse des Modell-Trainings für Atari-Spiele und Robotik-Umgebungen beleuchtet. Da sich das Ziel des Praktikums im späteren Verlauf zum Training von Robotik-Modellen wandelte, sind lediglich für das Trainieren von Robotik-Modellen letzten Endes Statistiken entstanden. Diese sind im öffentlichen Repository des Projekts zu finden.
+\section{Ergebnisse des Atari-Trainings}
+Nachdem erste Tests mit dem Atari-Spiel „Pitfall“ durchgelaufen sind, ergeben sich die in diesem Abschnitt zu findenden Erkenntnisse.
+\\
+\\
+Potentiell jedes Atari-Spiel hat einen eigenen Aktionsraum, obwohl es die gleiche Konsole ist. In Pitfall sind für das Spiel 18 verschiedene Eingaben möglich, während im Spiel „Space Invaders“ lediglich 6 Eingaben zur Verfügung stehen. Darum sollte zunächst mit dem Befehl \"env.env.get\_action\_meanings()\" der mögliche Aktionsraum des jeweiligen Spiels erforscht werden, um anschließend die NEAT-Konfiguration für dieses Spiel anzupassen (Anzahl der Ausgabe-Neuronen).
+\\
+\\
+Während der ersten Trainings-Einheiten für „Pitfall“ sind in den gerenderten Bildszenen unnötige Aktionen aufgefallen. Genauer das Springen auf der Stelle oder das Drücken der Eingabe „Unten“, wenn der Spieler auf der Erde steht. Genauso ist die Aktion „Noop“ (nichts tun) nicht zielführend. Stattdessen ist es für dieses Spiel besser, wenn die Spielfigur möglichst in Bewegung bleibt und somit die Umgebung mehr erkundet. Darum werden die sich aus dem Netz ergebenden Aktionen, die unwichtig erscheinen, mit 0 belegt, bevor die Aktion mit dem höchsten Wert dem Spiel übergeben wird. Dadurch wird sichergestellt, dass bspw. „Noop“ niemals im Spiel ausgeführt wird. Das Ergebnis war, dass die Figur sich wesentlich mehr bewegt. Daher sollte für jedes zu trainierende Spiel untersucht werden, ob es potentielle Aktionen gibt, die für das Erreichen besserer Punktzahlen unterdrückt werden sollten.
+\\
+\\
+Ein weiteres Problem ist die Schwierigkeit des Spiels. Nachdem es trotz mehrerer Anläufe der KI nicht möglich war, einen einzigen Punkt in Pitfall zu erhalten, habe ich zunächst die zur Verfügung stehende Zeit für die KI erhöht, bevor der jeweilige Versuch beendet wird. Nachdem auch das keine Punkte einbrachte, habe ich es selbst probiert. Im Internet gibt es eine Plattform, bei der kostenlos und legal im Browser einige Atari-Spiele gestartet werden können. Dazu zählt auch „Pitfall“. Da ich es selbst auch kaum schaffte, Punkte zu bekommen, ist mir dadurch die tatsächliche Komplexität des Spiels aufgefallen. Logischerweise ist es dadurch für das Netz ebenfalls schwierig, das Erlangen von Punkten zu lernen. Darum sollte vor dem Trainieren eines Spiels zunächst dessen Schwierigkeit am besten durch eigenes Spielen in Erfahrung gebracht werden.
+\\
+\\
+In manchen Beispielen aus dem Internet sind unterschiedliche Ansätze zur Bildvorverarbeitung zu finden. Zwar wurde nicht immer das NEAT-Verfahren eingesetzt, jedoch ist aus diesen Beispielen ebenfalls eine Erkenntnis im Bereich der Vorverarbeitung hervorgegangen. Zunächst werden aus dem aktuellen Bild des Spiels einige Teile herausgeschnitten. Zum Beispiel gibt es in „Pitfall“ am oberen Ende des Bildschirms eine Punkte- und Zeitanzeige. Wird dieser „Bildstreifen“ unberührt dem Netz übergeben, wird das Netz diese Anzeigen ebenfalls für das Lernen verwenden bzw. das Netz wird denken, dass dies relevante Informationen sind, um bessere Punktzahlen zu gewinnen. Da die beiden Anzeigen keinerlei Relevanz auf die resultierende Aktion des Netzes haben sollten, werden diese „Bildstreifen“ demenstprechend entfernt. Danach wird das Bild häufig in ein Graustufenbild umgewandelt, sodass statt drei Dimensionen (R, G und B) eine Dimension mit Grauwerten übrig bleibt. Das hat den Vorteil, dass das Netz für die Eingabeschicht zwei Drittel weniger Neuronen benötigt, als vor der Umwandlung. Im Anschluss daran, wird das Eingabebild verkleinert, um ebenfalls an Eingabeneuronen zu sparen. Dabei wird entweder gezielt eine Bildgröße in Pixel angegeben oder die ursprüngliche Größe wird durch eine Ganzzahl geteilt und danach gerundet. In bestimmten Fällen wird zum Schluss eine Segmentierung bzw. Binarisierung durchgeführt, um nicht relevante Hintergrundpixel, wie Bäume oder Himmel, für das Netz unsichtbar zu machen. Ob die eben erläuterten Arbeitsschritte zu einem besseren Trainingsergebnis führen, ist auszuprobieren, jedoch erhöhen sie logischerweise die Trainingsgeschwindigkeit des Netzes durch die Verkleinerung des Eingabebildes.
+\\
+\\
+Weiterhin fiel in den ersten Trainingseinheiten mit „Pitfall“ auf, dass es sich als schwierig heraustellt, dem Netz „Hilfestellungen“ zu geben. In einem Beispiel, in dem eine KI für das Spiel „Sonic“ trainiert wird, wird die aus der Aktion resultierende Belohung nicht einmal verwendet. Stattdessen wird bei jeder neu gerenderten Szene die horizontale Position des Spielers aus der Variablen „info“ nach der Aktionsdurchführung ermittelt und wenn die neue Position höher (weiter rechts) ist, als die bisher erreichte, wird die tatsächliche Belohnung von anfangs 0 um 10 erhöht. Diese Zahl ist am Ende einer Episode die Belohnung für das jeweilige Genom. Dadurch wird der KI eher antrainiert, dass sie sich möglichst nach rechts bewegen soll. In „Pitfall“ ist das jedoch nicht möglich, da die „info“-Variable hierbei nur die Anzahl der verbliebenen „Leben“ bereitstellt. Die einzige andere Möglichkeit, bei „Pitfall“ den Lernprozess zu verändern, ist, nach Erhalt einer negativen Belohnung (bspw. Durch das Fallen in Löcher) die aktuelle Lernepisode sofort zu beenden. Dadurch könnte sich das Netz zumindest merken, was es nicht machen darf. Dadurch ergeben sich Netze, die die Anfangspunktzahl von 2000 Punkten besitzen aber nur selten darunter. Es wird zudem in der offiziellen Dokumentation von Open AI Gym darauf hingewiesen, dass für offizielle Evaluationen eines Netzes die Werte innerhalb der „info“-Variable nicht für das Lernen dieser Netze verwendet werden darf.
+\section{Ergebnisse des Roboter-Trainings}
+Für das Training von Robotik-Modellen werden die Mujoco-Umgebungen "InvertedPendulum", "Swimmer", "Hopper", "HalfCheetah" und "Ant" verwendet. Die Trainingsergebnisse werden im Folgenden vorgestellt, wobei Statistiken zu den jeweiligen Umgebungen im öffentlichen Repository zu finden sind.
+\\
+\\
+Alle trainierten Robotik-Modelle sind in Anbetracht der Ergebnisse nicht in der Lage, die jeweiligen Umgebungen zu lösen. Stattdessen werden lokale Optima erreicht, die im Anschluss nicht mehr verlassen werden. Hierfür gibt es viele mögliche Ursachen. Den wahrscheinlich größten Einfluss haben die Hyperparameter, die aus der Konfigurationsdatei geladen werden. Die Trainingsdurchläufe fanden mit einer Populationsgröße von 100 Netzen statt. Dies ist der begrenzten Rechenleistung des Trainingscomputers geschuldet, um in absehbarer Zeit Ergebnisse vorweisen zu können. Mit 300, 1000 oder mehr Netzen steigt die Wahrscheinlickeit, bessere Ergebnisse zu erzielen für den Preis der erforderlichen Rechenleistung. Durch eine größere Population könnten bessere Optima entdeckt werden.
+\\
+\\
+Des Weiteren bildet die Wahl der initialen Verbindungsart, zumindest auf die zu Beginn zu beobachtenden Ergebnisse, ebenfalls eine wichtige Stellschraube. In den Hyperparametern ist einstellbar, ob die Neuronen vollvernetzt, teilvernetzt oder überhaupt nicht vernetzt sind. Im dritten Fall wurden sehr häufig nur schlechte Ergebnisse erzielt, weswegen diese Strategie nicht empfehlenswert ist. Es war zu beobachten, dass eher eine teilweise oder volle Vernetzung hilfreicher für das Training ist. Beim inversen Pendel erzielten sowohl eine initiale Vernetzung von 50\% als auch von 90\% nach ungefähr 200 Generationen die gleichen Werte.
