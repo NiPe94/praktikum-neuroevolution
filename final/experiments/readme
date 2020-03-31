@@ -1,0 +1,13 @@
+In diesem Ordner befinden sich die Ergebnisse bisher durchgeführter Mujoco-Umgebungs-Versuche. Jeder Versuch wurde mit dem normalen Python NEAT Package realisiert.
+
+Umg:
+Ant-v2
+HalfCheetah
+Hopper
+Humanoid
+HumanoidStandup
+InvertedDoublePendulum
+InvertedPendulum
+Reacher
+Swimmer
+Walker2d
