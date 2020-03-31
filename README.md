@@ -3,5 +3,5 @@ Dieses Projekt entsteht im Rahmen des Praktikums "Ingenieursmäßige Software-En
 
 ## Inhalt
 - Im Ordner **documentation** befinden sich die schriftliche Ausarbeitung, die Zeiterfassung und die Abschlusspräsentation des Projektes.
-- Der Ordner **evolution-strategies/nicope** enthält den im späteren Verlauf des Praktikums erstellten Jupyter-Code für das Training für Robotik- und Atari-Agenten.
+- Der Ordner **final** enthält den im späteren Verlauf des Praktikums erstellten Jupyter-Code für das Training für Robotik- und Atari-Agenten.
 - Der Ordner **first_try** enthält die ersten erstellten Jupyter-Beispiele für die verschiedenen Frameworks wie MultiNEAT und NEAT.
